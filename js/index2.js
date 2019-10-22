@@ -1,31 +1,33 @@
 var vm,loading;
 (function($) {
-    vm = new Vue({
-        el : "#Page",
-        data : {
-            app_id:'',
-            auth_code:''
-        },
-        mounted : function() {
-            var _this = this;
-            if(location.href.indexOf('app_id')){
-                _this.app_id = GetQueryString('app_id');
-                _this.auth_code = GetQueryString('auth_code');
-            }
-        },
-        methods : {
-            test : function() {
-                var appid = '2019102268531811';
-                var url = 'https://1729176996.github.io/testzfb/index2.html';
-                var href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id='+appid+'&scope=auth_user&redirect_uri='+url+'&state=init';
-                //location.href = href;
-                appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html',10);
+    appcan.ready(function(){
+        vm = new Vue({
+            el : "#Page",
+            data : {
+                app_id:'',
+                auth_code:''
             },
-            back:function(){
-                appcan.locStorage.setVal('registerObj',222);
-                appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html');
+            mounted : function() {
+                var _this = this;
+                if(location.href.indexOf('app_id')){
+                    _this.app_id = GetQueryString('app_id');
+                    _this.auth_code = GetQueryString('auth_code');
+                }
+            },
+            methods : {
+                test : function() {
+                    var appid = '2019102268531811';
+                    var url = 'https://1729176996.github.io/testzfb/index2.html';
+                    var href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id='+appid+'&scope=auth_user&redirect_uri='+url+'&state=init';
+                    //location.href = href;
+                    appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html',10);
+                },
+                back:function(){
+                    appcan.locStorage.setVal('registerObj',222);
+                    appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html');
+                }
             }
-        }
+        })
     })
 })($);
 

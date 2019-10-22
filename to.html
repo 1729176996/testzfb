@@ -25,7 +25,13 @@
         <script src="./js/bscroll.min.js"></script>
         <script src="./js/weui.js"></script>
         <script type="text/javascript" charset="utf-8">
-            appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html',10);
+            
+            $(function(){
+                appcan.ready(function(){
+                    appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html',10);
+                })
+                
+            });
         </script>
     </body>
 
