@@ -20,7 +20,7 @@ var vm,loading;
                     var url = 'https://1729176996.github.io/testzfb/index2.html';
                     var href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id='+appid+'&scope=auth_user&redirect_uri='+url+'&state=init';
                     //location.href = href;
-                    appcan.window.open("index2",href,10);
+                    appcan.window.open("index2f",href);
                     /*appcan.frame.open({
                         id:'index2f',
                         url:href,
