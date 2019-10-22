@@ -21,6 +21,7 @@ var vm,loading;
                 location.href = href;
             },
             back:function(){
+                appcan.locStorage.setVal('registerObj',222);
                 appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html');
             }
         }
