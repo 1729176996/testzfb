@@ -20,11 +20,11 @@ var vm,loading;
                     var url = 'https://1729176996.github.io/testzfb/index2.html';
                     var href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id='+appid+'&scope=auth_user&redirect_uri='+url+'&state=init';
                     //location.href = href;
-                    appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html',10);
+                    appcan.window.open("index",'http://1729176996.github.io/testzfb/index.html',10);
                 },
                 back:function(){
                     appcan.locStorage.setVal('registerObj',222);
-                    appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html');
+                    appcan.window.open("index",'http://1729176996.github.io/testzfb/index.html');
                 }
             }
         })
