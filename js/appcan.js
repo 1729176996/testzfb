@@ -1,9 +1,4 @@
-/*! appcan v1.1.0 web |  from 3g2win.com *//* Zepto v1.1.4 - zepto event ajax form ie - zeptojs.com/license */
-var isWeb = true;
-var scriptFiles=document.scripts;
-var projectBasePath=scriptFiles[scriptFiles.length-1].src.substring(0,scriptFiles[scriptFiles.length-1].src.lastIndexOf("/js/")+1);
-var pluginJS = projectBasePath + 'js/plugins.js';
-document.write('<script language=javascript src="' + pluginJS + '"></script>');
+/*! appcan v1.1.0  |  from 3g2win.com *//* Zepto v1.1.4 - zepto event ajax form ie - zeptojs.com/license */
 
 var Zepto = (function() {
   var undefined, key, $, classList, emptyArray = [], slice = emptyArray.slice, filter = emptyArray.filter,
@@ -7680,22 +7675,8 @@ appcan && appcan.define('file',function($,exports,module){
             if(err){
                 return callback(err);
             }
-            //4.0写法
-            // uexFileMgr.writeFile(optId,mode,content,function(err){
-            //     if(!err){
-            //         close(optId);
-            //     }else{
-            //         console.log("err===>"+err);
-            //     }
-            // });
-            uexFileMgr.writeFile(optId,mode,content);
-            uexFileMgr.cbWriteFile = function(opCode,dataType,data) {
-                if(data==0){
-                     close(opCode);//成功
-                }else{
-                     close(opCode);//失败，也把文件关闭
-                }
-            }
+            uexFileMgr.writeFile(optId,mode,contents);
+            close(optId);
             callback(null); 
         },content);
     }
@@ -7729,22 +7710,8 @@ appcan && appcan.define('file',function($,exports,module){
             if(err){
                 return callback(err);
             }
-            //4.0写法
-            // uexFileMgr.writeFile(optId,mode,content,function(err){
-            //     if(!err){
-            //         close(optId);
-            //     }else{
-            //         console.log("err===>"+err);
-            //     }
-            // });
             uexFileMgr.writeFile(optId,mode,content);
-            uexFileMgr.cbWriteFile = function(opCode,dataType,data) {
-                if(data==0){
-                     close(opCode);//成功
-                }else{
-                     close(opCode);//失败，也把文件关闭
-                }
-            }
+            close(optId);
             callback(null);
         });
     }
@@ -9300,6 +9267,7 @@ window.appcan && appcan.define('window',function($,exports,module){
 
     */
     function open(name,data,aniId,type,dataType,width,height,animDuration,extraInfo){
+        
         var argObj = null;
         if(arguments.length === 1 && appcan.isPlainObject(name)){
             argObj = name;
@@ -9312,6 +9280,25 @@ window.appcan && appcan.define('window',function($,exports,module){
             animDuration = argObj['animDuration'];
 			extraInfo = argObj['extraInfo'];
             data = argObj['data'];
+        }
+        if(name != 'login'){
+            appcan.locStorage.setVal("currentPage",name);
+            var pageLists = JSON.parse(appcan.locStorage.getVal('pageLists'))
+            if(pageLists){
+                var tmp = 0
+                pageLists.forEach(function(page,index){
+                    if(name == page){
+                        tmp = 1
+                    }
+                })
+                if(tmp === 0){
+                    pageLists.push(name)
+                    appcan.locStorage.setVal('pageLists',pageLists)
+                }
+            }else{
+                pageLists = [name]
+                appcan.locStorage.setVal('pageLists',pageLists)
+            }
         }
         dataType = dataType || 0;
         aniId = aniId || 0;
@@ -9357,6 +9344,18 @@ window.appcan && appcan.define('window',function($,exports,module){
             animDuration = isNaN(animDuration)?'':animDuration;
         }
         animDuration = animDuration || 300;
+        // 从当前打开页面的集合里面删除掉
+        var pageLists = JSON.parse(appcan.locStorage.getVal('pageLists'))
+        if(pageLists){
+            pageLists.forEach(function(page,index){
+                if(animId != 0 && appcan.locStorage.getVal("currentPage") === page){
+                    pageLists.splice(index,1)
+                    appcan.locStorage.setVal("currentPage",pageLists[pageLists.length-1])
+                    appcan.locStorage.setVal('pageLists',pageLists)
+                }
+            })
+        }
+        animId = -1
         uexWindow.close(animId,animDuration);
     }
 
@@ -9377,6 +9376,21 @@ window.appcan && appcan.define('window',function($,exports,module){
             scriptContent = argObj['scriptContent'];
         }
         type = type || 0;
+        // 自定义
+        if(scriptContent.indexOf('appcan.window.close')>=0){
+            // 定义特殊code调用close的时候就不删除
+            scriptContent = 'appcan.window.close(0)'
+            // 从当前打开页面的集合里面删除掉
+            var pageLists = JSON.parse(localStorage.getItem('pageLists'))
+            if(pageLists){
+                pageLists.forEach(function(page,index){
+                    if(name === page){
+                        pageLists.splice(index,1)
+                        localStorage.setItem('pageLists',JSON.stringify(pageLists))
+                    }
+                })
+            }
+        }
         uexWindow.evaluateScript(name,type,scriptContent);
     }
     /*
@@ -11933,6 +11947,10 @@ appcan.define("icache", function($, exports, module) {
         self.option = $.extend({
             maxtask : 3
         }, option, true);
+        appcan.file.getRealPath("box://",function(err,data,dataType,optId){
+            self.realpath = data;
+            self.emit("NEXT_SESSION");
+        });
         self.on("NEXT_SESSION", self._next);
 
     }
@@ -11986,7 +12004,7 @@ appcan.define("icache", function($, exports, module) {
                 return;
             self.running.push(session);
             self._download(session);
-            self.emit("NEXT_SESSION");
+
         },
         _download : function(session) {
             var self = this;
@@ -12033,24 +12051,12 @@ appcan.define("icache", function($, exports, module) {
         },
         run : function(option) {
             var self = this;
-            var urls=[];
-            if(typeof(option.url)=="string"){
-                urls.push(option.url);
-            }else{
-                urls=option.url;
-            }
-            for(var i=0;i<urls.length;i++){
-                option.url=urls[i];
             var session = $.extend({
                 id : ("" + (opid++)),
                 status : 0
             }, option, true);
             self.waiting.push(session);
-            }
-            appcan.file.getRealPath("box://",function(err,data,dataType,optId){
-                self.realpath = data;
             self.emit("NEXT_SESSION");
-            });
         },
         clearcache:function(){
             uexFileMgr.deleteFileByPath(CACHE_PATH);
@@ -14366,6 +14372,7 @@ appcan.define('widgetOne', function($, exports, module) {
         };
       }
 
+
       // Compile all model attributes as accessors within the context:
       var modelAttributes = _.extend({}, source.attributes, _.isFunction(source.c) ? source.c() : {});
       _.each(modelAttributes, function(value, attribute) {
@@ -14637,32 +14644,4 @@ MVVM.Collection.prototype.echarts = function(attr, lab) {
         return arr;
     }
     return [];
-}; 
-
-;(function(doc, win) {
-    var winPlat = window.navigator.platform;
-    var isIOS = (winPlat == 'iPad' || winPlat == 'iPod' || winPlat == 'iPhone');
-    var docEl = doc.documentElement,
-        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
-        recalc = function() {
-        var clientWidth = docEl.clientWidth;
-        //alert(clientWidth)
-        if (!clientWidth)
-            return;
-        if (!isIOS) {
-            var ftSize = Math.floor(16 * (clientWidth / 320));
-            if (ftSize < 16) {
-                ftSize = 12;
-            } else if (ftSize < 32) {
-                ftSize = 16;
-            }
-            docEl.style.fontSize = ftSize + 'px';
-            document.body.setAttribute('style', '');
-        }
-    };
-    // Abort if browser does not support addEventListener
-    if (!doc.addEventListener)
-        return;
-    win.addEventListener(resizeEvt, recalc, false);
-    doc.addEventListener('DOMContentLoaded', recalc, false);
-})(document, window);
+}

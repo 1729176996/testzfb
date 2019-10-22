@@ -12,8 +12,8 @@ var vm,loading;
             methods : {
                 test : function() {
                     appcan.locStorage.setVal('registerObj',111);
-                    //appcan.window.open("index2",'https://1729176996.github.io/testzfb/index2.html',10);
-                    location.href = 'https://1729176996.github.io/testzfb/index2.html';
+                    appcan.window.open("index2",'https://1729176996.github.io/testzfb/index2.html',10);
+                    //location.href = 'https://1729176996.github.io/testzfb/index2.html';
                 }
             }
         })
