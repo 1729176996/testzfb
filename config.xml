@@ -9,12 +9,12 @@
     <updateurl/>
     <logserverip/>
     <showmyspace>false</showmyspace>
-    <obfuscation>true</obfuscation>
+    <obfuscation>false</obfuscation>
     <bgcolor>#fefefe</bgcolor>
     <orientation>1</orientation>
-    <error/>
+    <error src=""/>
     <removeloading/>
     <debug/>
     <partobfuscation/>
-    <webapp>false</webapp>
+    <webapp>true</webapp>
 </widget>
