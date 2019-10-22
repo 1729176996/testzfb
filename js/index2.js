@@ -18,7 +18,7 @@ var vm,loading;
                 var appid = '2019102268531811';
                 var url = 'https://1729176996.github.io/testzfb/index2.html';
                 var href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id='+appid+'&scope=auth_user&redirect_uri='+url+'&state=init';
-                location.href = href;
+                appcan.window.open("index2",href);
             },
             back:function(){
                 appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html');
