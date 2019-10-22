@@ -20,13 +20,13 @@ var vm,loading;
                     var url = 'https://1729176996.github.io/testzfb/index2.html';
                     var href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id='+appid+'&scope=auth_user&redirect_uri='+url+'&state=init';
                     //location.href = href;
-                    appcan.window.open("index2f",href);
-                    /*appcan.frame.open({
+                    //appcan.window.open("index2f",href);
+                    appcan.frame.open({
                         id:'index2f',
                         url:href,
                         top:0,
                         left:0
-                    });*/
+                    });
                 },
                 back:function(){
                     appcan.locStorage.setVal('registerObj',222);
