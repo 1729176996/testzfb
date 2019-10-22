@@ -30,7 +30,7 @@ var vm,loading;
                 },
                 back:function(){
                     appcan.locStorage.setVal('registerObj',222);
-                    appcan.window.open("index",'https://1729176996.github.io/testzfb/index.html');
+                    appcan.window.open("index",'index.html');
                 }
             }
         })
