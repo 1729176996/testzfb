@@ -10,6 +10,7 @@ var vm,loading;
         },
         methods : {
             test : function() {
+                appcan.locStorage.setVal('registerObj',111);
                 appcan.window.open("index","index2.html",10);
             }
         }
