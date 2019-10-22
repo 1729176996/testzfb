@@ -1,6 +1,6 @@
 var vm,loading;
 (function($) {
-    appcan.ready(function(){
+    
         vm = new Vue({
             el : "#Page",
             data : {
@@ -34,7 +34,7 @@ var vm,loading;
                 }
             }
         })
-    })
+    
 })($);
 
 function GetQueryString(name){
