@@ -15,10 +15,23 @@ var vm,loading;
         },
         methods : {
             test : function() {
-                location.href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019102268531811&scope=auth_user&redirect_uri=https://1729176996.github.io/testzfb/index2.html&state=init';
+                var appid = '2019102268531811';
+                var url = 'https://1729176996.github.io/testzfb/index2.html';
+                var href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id='+appid+'&scope=auth_user&redirect_uri='+url+'&state=init';
+                appcan.frame.open({
+                    id:'zfbdl',
+                    url:href,
+                    top:0,
+                    left:0
+                });
+                //location.href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019102268531811&scope=auth_user&redirect_uri=https://1729176996.github.io/testzfb/index2.html&state=init';
             },
             back:function(){
-                appcan.window.close(-1);
+                if(location.href.indexOf('app_id')){
+                    appcan.frame.close('zfbdl');
+                }else{
+                    appcan.window.close(-1);
+                }
             }
         }
     })
